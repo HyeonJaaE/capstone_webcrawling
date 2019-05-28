@@ -86,7 +86,7 @@ for d in dept:
             if sum[i] in check:
                 day += sum[i] + "-"
                 if sum[i] == '셀':
-                    time += "0_0"
+                    time += "0_0-"
                 else:
                     idx = i + 1
                     while True:
