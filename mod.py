@@ -6,10 +6,10 @@ tmp = list(csv.reader(fr))
 rdr = tmp[1:]
 fr.close()
 
-fw = open('항공우주공학과.csv', 'w', encoding='utf-8', newline='')
+fw = open("testresult.csv", 'w', encoding='utf-8', newline='')
 wr = csv.writer(fw)
 
-check = ['월','화','수','목','금']
+check = ['월','화','수','목','금','토','셀']
 for line in rdr:
     day = ""
     time = ""
@@ -22,24 +22,43 @@ for line in rdr:
     sum = ""
     for b in a:
         c = b.split('(', maxsplit=1)
-        room += c[1].replace(")", "")
+        if len(c) > 1:
+            room += c[1].replace(")", "")
         sum += c[0]
 
-    sum = sum.replace(",","")
-    sumList = list(sum)
+    for i in range(len(sum)):
+        if sum[i] in check:
+            day += sum[i] + "-"
+            if sum[i] == '셀':
+                time += "0_0"
+            else:
+                idx = i + 1
+                while True:
+                    if sum[idx] in check:
+                        tmp = sum[i+1: idx]
+                        if tmp[len(tmp)-1] == ",":
+                            tmp = tmp[0:-1]
+                        print(tmp)
+                        tmp = tmp.split(',')
+                        time += tmp[0] + "_" + tmp[len(tmp)-1] +"-"
+                        break
+                    elif idx+1 == len(sum):
+                        tmp = sum[i+1: idx+1]
+                        if tmp[len(tmp)-1] == ",":
+                            tmp = tmp[0:-1]
+                        print(tmp)
+                        tmp = tmp.split(',')
+                        time += tmp[0] + "_" + tmp[len(tmp)-1] +"-"
+                        break
+                    idx = idx +1
 
-    day += sumList[0]
-    time += sumList[1]
+    if day[len(day)-1] == "-":
+        day = day[0:-1]
 
-    for i in range(2, len(sumList)):
-        if sumList[i] in check:
-            day += ("-" + sumList[i])
-            time += ("_" + sumList[i-1])
-            time += ("-" + sumList[i+1])
-        if i == len(sumList)-1:
-            time += ("_" + sumList[i])
+    if time[len(time)-1] == "-":
+        time = time[0:-1]
 
-    tmp = [line[1], line[3], line[4], int(float(line[5])),line[6], line[9], day, time, room, line[8]]
+    tmp = [line[1], line[3], line[4], int(float(line[5])),line[6], line[9], day, time, room, line[8].replace(",","_")]
     wr.writerow(tmp)
 
 fw.close()
