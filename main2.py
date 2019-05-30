@@ -10,24 +10,19 @@ df = pd.DataFrame(temp)
 
 
 dept = [
-"기계공학과 / 기계공학",
-"항공우주공학과 / 항공우주공학",
-"조선해양공학과 / 조선해양공학",
-"산업경영공학과 / 산업경영공학",
-"화학공학과 / 화학공학",
-"생명공학과 / 생명공학",
-"고분자공학과 / 고분자공학",
-"신소재공학과 / 신소재공학",
-"사회인프라공학과 / 사회인프라공학",
-"컴퓨터공학과 / 컴퓨터공학"]
+"교양영어",
+"교양한국어",
+"크로스오버",
+"핵심교양",
+"일반교양"]
 
 for d in dept:
     browser = webdriver.Chrome(ChromeDriverManager().install())
     browser.implicitly_wait(3)
     browser.get("http://sugang.inha.ac.kr/sugang/SU_51001/Lec_Time_Search.aspx")
-    Dept = browser.find_element_by_id("ddlDept")
+    Dept = browser.find_element_by_id("ddlKita")
     Dept.send_keys(d)
-    browser.find_element_by_id("ibtnSearch1").click()
+    browser.find_element_by_id("ibtnSearch2").click()
     results = browser.find_elements_by_class_name('Center')
 
     #기계공학과 / 기계공학
@@ -112,7 +107,7 @@ for d in dept:
         if time[len(time)-1] == "-":
             time = time[0:-1]
 
-        tmp = [line[1], line[3], line[4], int(float(line[5])),line[6], line[9], day, time, room(" ","_"), line[8].replace(",","_")]
+        tmp = [line[1], line[3], line[4], int(float(line[5])),line[6], line[9], day, time, room.replace(" ","_"), line[8].replace(",","_")]
         wr.writerow(tmp)
 
     fw.close()
